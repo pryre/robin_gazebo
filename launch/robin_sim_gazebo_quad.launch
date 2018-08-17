@@ -13,6 +13,7 @@
 
 	<remap from="/robin_gazebo/command/motor_pwm" to="/mavros/rc/out"/>
 	<remap from="/robin_gazebo/state/hil" to="/mavros/hil/state"/>
+	<remap from="/robin_gazebo/state/pose" to="/mavros/mocap/pose"/>
 
 	<group if="$(arg rviz)">
 		<node name="rviz" pkg="rviz" args="-d $(find robin_gazebo)/config/display.rviz" type="rviz" respawn="false" output="screen"/>

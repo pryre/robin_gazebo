@@ -10,7 +10,6 @@
 
 #include <std_msgs/Float64MultiArray.h>
 #include <mavros_msgs/RCOut.h>
-#include <mavros_msgs/HilStateQuaternion.h>
 
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf2_ros/static_transform_broadcaster.h>
@@ -34,10 +33,7 @@ class RobinGazeboPlugin : public ModelPlugin
 		//Model Odom
 		ros::Timer timer_odom_;
 		ros::Publisher pub_odom_;
-
-		//Hardware in the Loop
-		ros::Publisher pub_hil_;
-		mavros_msgs::HilStateQuaternion msg_hil_;
+		ros::Publisher pub_pose_;
 
 		//PWM Motor
 		ros::Subscriber sub_rc_out_;
@@ -61,6 +57,7 @@ class RobinGazeboPlugin : public ModelPlugin
 
 		std::string parent_name_;
 		nav_msgs::Odometry msg_odom_;
+		geometry_msgs::PoseStamped msg_pose_;
 
 		std_msgs::Float64MultiArray msg_motor_velocity_;
 
@@ -93,16 +90,14 @@ class RobinGazeboPlugin : public ModelPlugin
 			sub_rc_out_ = nh_.subscribe<mavros_msgs::RCOut>("command/motor_pwm", 100, &RobinGazeboPlugin::rc_out_cb, this );
 			pub_motor_velocity_ = nh_.advertise<std_msgs::Float64MultiArray>("command/motor_velocity", 10);
 
-			//HIL
-			pub_hil_ = nh_.advertise<mavros_msgs::HilStateQuaternion>( "state/hil", 10 );
-			msg_hil_.header.frame_id = model_->GetName();
-
 			//Model Odom
 			timer_odom_ = nh_.createTimer(ros::Duration(0.01), &RobinGazeboPlugin::callback_odom, this );
 			pub_odom_ = nh_.advertise<nav_msgs::Odometry>( "state/odom", 10 );
+			pub_pose_ = nh_.advertise<geometry_msgs::PoseStamped>( "state/pose", 10 );
 
 			msg_odom_.header.frame_id = parent_name_;
 			msg_odom_.child_frame_id = model_->GetName();
+			msg_pose_.header.frame_id = parent_name_;
 
 			ROS_INFO("Robin gazebo preparing transforms...");
 
@@ -173,6 +168,11 @@ class RobinGazeboPlugin : public ModelPlugin
 
 			pub_odom_.publish(msg_odom_);
 
+			//Derive Pose output for ease of use
+			msg_pose_.header.stamp = e.current_real;
+			msg_pose_.pose = msg_odom_.pose.pose;
+			pub_pose_.publish(msg_pose_);
+
 			//Handle Pose for ROS
 			msg_odom_.header.stamp = e.current_real;
 
@@ -192,19 +192,6 @@ class RobinGazeboPlugin : public ModelPlugin
 			msg_odom_.twist.twist.angular.z = model_->GetRelativeAngularVel().z;
 
 			pub_odom_.publish(msg_odom_);
-
-			//Handle Mavlink HIL messages
-			msg_hil_.header.stamp = e.current_real;
-
-			msg_hil_.orientation = msg_odom_.pose.pose.orientation;
-			msg_hil_.angular_velocity = msg_odom_.twist.twist.angular;
-			msg_hil_.linear_velocity = msg_odom_.twist.twist.linear;
-			msg_hil_.linear_acceleration.x = model_->GetRelativeLinearAccel().x;
-			msg_hil_.linear_acceleration.y = model_->GetRelativeLinearAccel().y;
-			msg_hil_.linear_acceleration.z = model_->GetRelativeLinearAccel().z;
-			//XXX: Don't really care about the rest
-
-			pub_hil_.publish(msg_hil_);
 
 			//Handle TF things here as well
 			geometry_msgs::TransformStamped tb;

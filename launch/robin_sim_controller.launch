@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <launch>
+	<arg name="wp_name" default="square"/>
+
 	<!-- PATH PLANNING -->
+	<node pkg="contrail" type="load_waypoints" name="load_waypoints" clear_params="true"
+	ns="robin_gazebo" output="screen">
+		<param name="frame_id" value="map" />
+
+		<rosparam command="load" file="$(find contrail)/waypoints/$(arg wp_name).yaml"/>
+	</node>
+
 	<node pkg="contrail" type="converter_waypoints_path" name="wp_converter" clear_params="true"
 	ns="robin_gazebo" output="screen">
 		<remap from="~waypoints" to="waypoints" />

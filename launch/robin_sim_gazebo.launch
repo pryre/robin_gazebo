@@ -47,8 +47,13 @@
 	</group>
 
 	<!-- MODEL SETUP -->
-
 	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
 
 	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model robin_gazebo -param robot_description -z 1.0"/>
+
+	<!-- HIL SETUP -->
+	<node name="hil_sensor" pkg="robin_gazebo" type="hil_sensor_node" respawn="false"
+	ns="robin_gazebo" output="screen">
+		<remap from="hil/imu_data" to="/mavros/hil/imu_ned"/>
+	</node>
 </launch>
