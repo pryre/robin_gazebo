@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<launch>
+	<!-- PATH PLANNING -->
+	<node pkg="contrail" type="converter_waypoints_path" name="wp_converter" clear_params="true"
+	ns="robin_gazebo" output="screen">
+		<remap from="~waypoints" to="waypoints" />
+		<remap from="~path" to="mavel/reference/contrail/path" />
+	</node>
+
+	<!-- HIGH LEVEL CONTROL -->
+	<node pkg="mavel" type="mavel_node" name="mavel"
+	ns="robin_gazebo" clear_params="true" output="screen">
+		<rosparam command="load" file="$(find robin_gazebo)/config/mavel_sim_params.yaml"/>
+
+		<remap from="~command/attitude" to="/mavros/setpoint_raw/attitude"/>
+		<remap from="~state/odometry" to="state/odom"/>
+		<remap from="~state/mav_state" to="/mavros/state"/>
+	</node>
+</launch>

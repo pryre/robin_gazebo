@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<robot name="robin_hex" xmlns:xacro="http://ros.org/wiki/xacro">
+	<!-- Constants -->
+	<xacro:property name="pi" value="3.1415926535897931"/>
+
+	<!-- Import macros -->
+	<xacro:include filename="$(find robin_gazebo)/urdf/frame_battery.xacro" />
+	<xacro:include filename="$(find robin_gazebo)/urdf/frame_arm_red.xacro" />
+	<xacro:include filename="$(find robin_gazebo)/urdf/frame_arm_white.xacro" />
+	<xacro:include filename="$(find robin_gazebo)/urdf/frame_motor.xacro" />
+	<xacro:include filename="$(find robin_gazebo)/urdf/frame_skid.xacro" />
+
+	<xacro:include filename="$(find robin_gazebo)/urdf/motor_joint.xacro" />
+
+	<!-- Import all Gazebo-customization elements, including Gazebo colors -->
+	<xacro:include filename="$(find robin_gazebo)/urdf/robin.gazebo" />
+
+	<!-- Used for fixing robot to Gazebo 'base_link' -->
+	<link name="world"/>
+
+	<joint name="fixed" type="floating">
+		<parent link="world"/>
+		<child link="base_link"/>
+	</joint>
+
+	<!-- Base Link -->
+	<link name="base_link">
+		<inertial>
+			<!-- Old estimate
+			<mass value="1.5480" />
+			<inertia ixx="0.015198135489664" iyy="0.014353211169664" izz="0.027767959346667" ixy="0.0" ixz="0.0" iyz="0.0" />
+			-->
+			<mass value="1.80497" />
+			<inertia ixx="0.02961" iyy="0.02933" izz="0.05342" ixy="0.0" ixz="0.00004" iyz="0.0" />
+
+		</inertial>
+
+		<collision name='collision_base_link'>
+			<geometry>
+				<cylinder radius="0.105" length="0.03"/>
+			</geometry>
+		</collision>
+
+		<visual name='visual_base_link'>
+			<geometry>
+				<cylinder radius="0.105" length="0.03"/>
+			</geometry>
+
+			<material name="grey">
+				<color rgba="0.2 0.2 0.2 1.0"/>
+			</material>
+		</visual>
+
+		<xacro:frame_battery suffix="battery_primary" size="0.052 0.146 0.034" xyz="0.0 0.0 0.032" rpy="0.0 0.0 0.0" />
+
+		<xacro:frame_arm_white suffix="arm_1" length="0.17" radius="0.015" xyz="0 -0.19 0" rpy="${pi/2} 0 0" />
+		<xacro:frame_arm_white suffix="arm_2" length="0.17" radius="0.015" xyz="0 0.19 0" rpy="${pi/2} 0 0" />
+		<xacro:frame_arm_red suffix="arm_3" length="0.17" radius="0.015" xyz="0.165 0.095 0" rpy="${pi/2} 0 ${2*pi/3}" />
+		<xacro:frame_arm_white suffix="arm_4" length="0.17" radius="0.015" xyz="-0.165 -0.095 0" rpy="${pi/2} 0 ${2*pi/3}" />
+		<xacro:frame_arm_red suffix="arm_5" length="0.17" radius="0.015" xyz="0.165 -0.095 0" rpy="${pi/2} 0 ${pi/3}" />
+		<xacro:frame_arm_white suffix="arm_6" length="0.17" radius="0.015" xyz="-0.165 0.095 0" rpy="${pi/2} 0 ${pi/3}" />
+
+		<xacro:frame_motor suffix="motor_1" length="0.024" radius="0.014" xyz="0 -0.275 0.027" rpy="0 0 0" />
+		<xacro:frame_motor suffix="motor_2" length="0.024" radius="0.014" xyz="0 0.275 0.027" rpy="0 0 0" />
+		<xacro:frame_motor suffix="motor_3" length="0.024" radius="0.014" xyz="0.2382 0.1375 0.027" rpy="0 0 0" />
+		<xacro:frame_motor suffix="motor_4" length="0.024" radius="0.014" xyz="-0.2382 -0.1375 0.027" rpy="0 0 0" />
+		<xacro:frame_motor suffix="motor_5" length="0.024" radius="0.014" xyz="0.2382 -0.1375 0.027" rpy="0 0 0" />
+		<xacro:frame_motor suffix="motor_6" length="0.024" radius="0.014" xyz="-0.2382 0.1375 0.027" rpy="0 0 0" />
+
+		<xacro:frame_skid suffix="skid_1" length="0.12" radius="0.008" xyz="0 -0.275 -0.075" rpy="0 0 0" />
+		<xacro:frame_skid suffix="skid_2" length="0.12" radius="0.008" xyz="0 0.275 -0.075" rpy="0 0 0" />
+		<xacro:frame_skid suffix="skid_3" length="0.12" radius="0.008" xyz="0.2382 0.1375 -0.075" rpy="0 0 0" />
+		<xacro:frame_skid suffix="skid_4" length="0.12" radius="0.008" xyz="-0.2382 -0.1375 -0.075" rpy="0 0 0" />
+		<xacro:frame_skid suffix="skid_5" length="0.12" radius="0.008" xyz="0.2382 -0.1375 -0.075" rpy="0 0 0" />
+		<xacro:frame_skid suffix="skid_6" length="0.12" radius="0.008" xyz="-0.2382 0.1375 -0.075" rpy="0 0 0" />
+	</link>
+
+	<xacro:motor_joint motor_number="1" parent="base_link" xyz="0 -0.275 0.0455" direction="cw" />
+	<xacro:motor_joint motor_number="2" parent="base_link" xyz="0 0.275 0.0475" direction="ccw" />
+	<xacro:motor_joint motor_number="3" parent="base_link" xyz="0.2382 0.1375 0.0455" direction="cw" />
+	<xacro:motor_joint motor_number="4" parent="base_link" xyz="-0.2382 -0.1375 0.0455" direction="ccw" />
+	<xacro:motor_joint motor_number="5" parent="base_link" xyz="0.2382 -0.1375 0.0455" direction="ccw" />
+	<xacro:motor_joint motor_number="6" parent="base_link" xyz="-0.2382 0.1375 0.0455" direction="cw" />
+
+
+</robot>
