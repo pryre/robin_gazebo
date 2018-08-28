@@ -9,21 +9,12 @@ add_definitions(-std=c++11)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  gazebo_ros
-  gazebo_ros_control
-  dh_parameters
-  pid_controller_lib
-  controller_manager
-  joint_state_controller
-  robot_state_publisher
   std_msgs
   sensor_msgs
   mavros_msgs
   nav_msgs
-  gazebo_msgs
-  hector_gazebo_plugins
-  mantis_description
-  message_generation
+  geometry_msgs
+  tf2_ros
 )
 
 ## System dependencies are found with CMake's conventions
@@ -123,7 +114,6 @@ catkin_package(
 #  CATKIN_DEPENDS geometry_msgs roscpp tf2
   DEPENDS
     roscpp
-	gazebo_ros
 #	mantis_gazebo_generate_messages
 )
 

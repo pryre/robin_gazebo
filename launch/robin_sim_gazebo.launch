@@ -2,8 +2,8 @@
 <launch>
 	<arg name="model" default=""/>
 	<arg name="world" default=""/>
-	<env name="GAZEBO_MODEL_PATH" value="$(find robin_gazebo)/models:$(env GAZEBO_MODEL_PATH)" />
-	<env name="GAZEBO_RESOURCE_PATH" value="$(find robin_gazebo)/resources:$(env GAZEBO_RESOURCE_PATH)" />
+	<env name="GAZEBO_MODEL_PATH" value="$(find robin_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />
+	<env name="GAZEBO_RESOURCE_PATH" value="$(find robin_gazebo)/resources:$(optenv GAZEBO_RESOURCE_PATH)" />
 
 	<!-- GAZEBO SETUP -->
 

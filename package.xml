@@ -41,44 +41,33 @@
   <!--   <test_depend>gtest</test_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-
   <build_depend>roscpp</build_depend>
-  <build_depend>pid_controller_lib</build_depend>
-  <build_depend>dh_parameters</build_depend>
-  <build_depend>mantis_description</build_depend>
-  <build_depend>gazebo_ros</build_depend>
-  <build_depend>gazebo_ros_control</build_depend>
-  <build_depend>controller_manager</build_depend>
-  <build_depend>joint_state_controller</build_depend>
-  <build_depend>robot_state_publisher</build_depend>
+  <build_depend>tf2_ros</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>mavros_msgs</build_depend>
   <build_depend>nav_msgs</build_depend>
-  <build_depend>gazebo_msgs</build_depend>
+  <build_depend>mavros_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
-  <build_depend>dynamixel_msgs</build_depend>
-  <build_depend>hector_gazebo_plugins</build_depend>
-  <build_depend>message_generation</build_depend>
-
+  <build_depend>geometry_msgs</build_depend>
 
   <run_depend>roscpp</run_depend>
-  <run_depend>pid_controller_lib</run_depend>
-  <run_depend>dh_parameters</run_depend>
-  <run_depend>mantis_description</run_depend>
+  <run_depend>tf2_ros</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>mavros_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>geometry_msgs</run_depend>
   <run_depend>gazebo_ros</run_depend>
   <run_depend>gazebo_ros_control</run_depend>
-  <run_depend>controller_manager</run_depend>
-  <run_depend>joint_state_controller</run_depend>
-  <run_depend>robot_state_publisher</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>mavros_msgs</run_depend>
-  <run_depend>nav_msgs</run_depend>
-  <run_depend>gazebo_msgs</run_depend>
-  <run_depend>sensor_msgs</run_depend>
-  <run_depend>dynamixel_msgs</run_depend>
   <run_depend>hector_gazebo_plugins</run_depend>
-  <run_depend>message_generation</run_depend>
-  <run_depend>message_runtime</run_depend>
+  <!--
+  <run_depend>rviz</run_depend>
+  <run_depend>rqt_gui</run_depend>
+  <run_depend>contrail</run_depend>
+  <run_depend>mavel</run_depend>
+  <run_depend>rqt_mavros_gui</run_depend>
+  <run_depend>rqt_robin_gcs</run_depend>
+  <run_depend>rqt_generic_hud</run_depend>
+   -->
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
