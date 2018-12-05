@@ -141,7 +141,7 @@ class RobinGazeboPlugin : public ModelPlugin
 
 				double norm_ref = ( pwm - param_pwm_min_ ) / ( param_pwm_max_ - param_pwm_min_ );
 				//double cmd_vel = norm_ref * param_motor_vel_max_;
-				msg_motor_velocity_.data[i] = std::sqrt(norm_ref * param_motor_vel_max_ * param_motor_vel_max_);
+				msg_motor_velocity_.data[i] = norm_ref * param_motor_vel_max_; //std::sqrt(norm_ref * param_motor_vel_max_ * param_motor_vel_max_);
 			}
 
 			pub_motor_velocity_.publish(msg_motor_velocity_);
