@@ -1,0 +1,41 @@
+<?xml version='1.0'?>
+<launch>
+	<!-- vim: set ft=xml noet : -->
+	<!-- example launch script for PX4 based FCU's -->
+	<arg name="model_name" default="mantis_uav"/>
+
+	<arg name="fcu_bind" default="udp://0.0.0.0:14560@0.0.0.0:14551" />
+
+	<arg name="fcu_url" default="udp://0.0.0.0:14551@0.0.0.0:14560" />
+	<arg name="gcs_url" default="udp://0.0.0.0:14552@0.0.0.0:14550" />
+	<arg name="tgt_system" default="1" />
+	<arg name="tgt_component" default="1" />
+	<arg name="log_output" default="screen" />
+	<arg name="fcu_protocol" default="v2.0" />
+	<arg name="respawn_mavros" default="false" />
+
+	<group ns="$(arg model_name)">
+		<node pkg="robin" type="robin_node" name="robin"
+			args="--telem0 $(arg fcu_bind)
+				  --eeprom robin/$(arg model_name).bin"
+			clear_params="true"/>
+
+		<include file="$(find mavros)/launch/node.launch">
+			<!--
+			<arg name="pluginlists_yaml" value="$(find mavros)/launch/px4_pluginlists.yaml" />
+			<arg name="config_yaml" value="$(find mavros)/launch/px4_config.yaml" />
+			-->
+
+			<arg name="pluginlists_yaml" value="$(find mantis_description)/config/robin_sim_pluginlists.yaml" />
+			<arg name="config_yaml" value="$(find mantis_description)/config/robin_config.yaml" />
+
+			<arg name="fcu_url" value="$(arg fcu_url)" />
+			<arg name="gcs_url" value="$(arg gcs_url)" />
+			<arg name="tgt_system" value="$(arg tgt_system)" />
+			<arg name="tgt_component" value="$(arg tgt_component)" />
+			<arg name="log_output" value="$(arg log_output)" />
+			<arg name="fcu_protocol" value="$(arg fcu_protocol)" />
+			<arg name="respawn_mavros" default="$(arg respawn_mavros)" />
+		</include>
+	</group>
+</launch>
