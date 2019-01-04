@@ -1,19 +1,46 @@
 <?xml version='1.0'?>
 <launch>
 	<arg name="model" default="$(find robin_gazebo)/urdf/robin_hex.xacro"/>
-	<arg name="world" default="robin_hex"/>
+	<arg name="world" default="robin_empty"/>
+	<arg name="model_id" default="robin"/>
 	<arg name="frame_id" default="map"/>
-	<arg name="rviz" default="false"/>
-	<arg name="rqt" default="false"/>
+	<arg name="rviz" default="true"/>
+	<arg name="rqt" default="true"/>
+	<arg name="spawn_x" default="0.0"/>
+	<arg name="spawn_y" default="0.0"/>
+	<arg name="spawn_z" default="0.5"/>
+	<arg name="gazebo" default="true"/>
 
-	<group ns="/robin_gazebo">
-		<param name="prop_layout" value="quad_x4"/>
-		<param name="base_arm_length" value="0.225"/>
+	<group ns="$(arg model_id)">
+		<param name="prop_layout" value="hex_x6"/>
+		<param name="base_arm_length" value="0.275"/>
+
+		<node pkg="topic_tools" type="relay" name="relay_pwm" args="mavros/rc/out command/motor_pwm"/>
+		<node pkg="topic_tools" type="relay" name="relay_pose" args="state/pose mavros/mocap/pose"/>
+
+		<!-- HIL SETUP -->
+		<node name="hil_sensor" pkg="robin_gazebo" type="hil_sensor_viz_node" respawn="false" output="screen">
+			<remap from="hil/imu_data" to="mavros/hil/imu_ned"/>
+		</node>
+
+		<!-- MODEL SETUP -->
+		<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
+
+		<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+		args="-urdf
+			  -model $(arg model_id)
+			  -param robot_description
+			  -x $(arg spawn_x)
+			  -y $(arg spawn_y)
+			  -z $(arg spawn_z)
+			  -unpause"/>
+
+		<node pkg="tf2_ros" type="static_transform_publisher" name="tf_local_world"
+		args="0.0 0.0 0.0 0.0 0.0 0.0 world $(arg model_id)/world" clear_params="true" output="screen"/>
+
+		<node pkg="tf2_ros" type="static_transform_publisher" name="tf_local_map"
+		args="0.0 0.0 0.0 0.0 0.0 0.0 $(arg model_id)/world map" clear_params="true" output="screen"/>
 	</group>
-
-	<remap from="/robin_gazebo/command/motor_pwm" to="/mavros/rc/out"/>
-	<remap from="/robin_gazebo/state/hil" to="/mavros/hil/state"/>
-	<remap from="/robin_gazebo/state/pose" to="/mavros/mocap/pose"/>
 
 	<group if="$(arg rviz)">
 		<node name="rviz" pkg="rviz" args="-d $(find robin_gazebo)/config/display.rviz" type="rviz" respawn="false" output="screen"/>
@@ -24,8 +51,7 @@
 	</group>
 
 	<!-- Gazebo -->
-	<include file="$(find robin_gazebo)/launch/robin_sim_gazebo.launch">
-		<arg name="model" value="$(arg model)" />
-		<arg name="world" value="$(arg world)" />
-	</include>
+	<group if="$(arg gazebo)">
+		<include file="$(find robin_gazebo)/launch/robin_sim_gazebo.launch"/>
+	</group>
 </launch>

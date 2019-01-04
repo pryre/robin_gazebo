@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <launch>
 	<arg name="model" default="$(find robin_gazebo)/urdf/robin_quad.xacro"/>
-	<arg name="world" default="robin_quad"/>
+	<arg name="world" default="robin_empty"/>
 	<arg name="model_id" default="robin"/>
 	<arg name="frame_id" default="map"/>
 	<arg name="rviz" default="true"/>

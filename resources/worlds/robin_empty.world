@@ -10,10 +10,10 @@
       <uri>model://ground_plane</uri>
     </include>
 
-	<include>
+	<!--<include>
       <uri>model://robin_quad</uri>
     </include>
-    <!--<include>
+    <include>
       <uri>model://uneven_ground</uri>
     </include>-->
     <physics name='default_physics' default='0' type='ode'>

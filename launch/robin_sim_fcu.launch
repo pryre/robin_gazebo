@@ -18,7 +18,7 @@
 		<node pkg="robin" type="robin_node" name="robin"
 			args="--telem0 $(arg fcu_bind)
 				  --eeprom robin/$(arg model_id).bin"
-			clear_params="true"/>
+			clear_params="true" output="screen"/>
 
 		<include file="$(find mavros)/launch/node.launch">
 			<!--
