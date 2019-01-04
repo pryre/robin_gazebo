@@ -61,14 +61,6 @@
           "groups": {
             "plugin": {
               "keys": {
-                "val_min": {
-                  "type": "repr",
-                  "repr": "0.0"
-                },
-                "topic_content": {
-                  "type": "repr",
-                  "repr": "u'percentage'"
-                },
                 "topic_name": {
                   "type": "repr",
                   "repr": "u'/robin/mavros/battery'"
@@ -76,6 +68,18 @@
                 "topic_type": {
                   "type": "repr",
                   "repr": "u'sensor_msgs/BatteryState'"
+                },
+                "val_min": {
+                  "type": "repr",
+                  "repr": "0.0"
+                },
+                "display_mode": {
+                  "type": "repr",
+                  "repr": "u'Vertical'"
+                },
+                "topic_content": {
+                  "type": "repr",
+                  "repr": "u'percentage'"
                 },
                 "val_max": {
                   "type": "repr",
@@ -303,9 +307,13 @@
             },
             "plugin": {
               "keys": {
+                "mode_selection": {
+                  "type": "repr",
+                  "repr": "u'OFFBOARD'"
+                },
                 "namespace": {
                   "type": "repr",
-                  "repr": "u'/robin/mavros/'"
+                  "repr": "u'/robin/mavros'"
                 }
               },
               "groups": {}
