@@ -1,0 +1,8 @@
+<?xml version='1.0'?>
+<launch>
+	<include file="$(find robin_gazebo)/launch/robin_sim_quad.launch"/>
+
+	<include file="$(find robin_gazebo)/launch/robin_sim_udp.launch"/>
+
+	<include file="$(find robin_gazebo)/launch/robin_sim_controller.launch"/>
+</launch>

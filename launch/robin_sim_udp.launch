@@ -2,7 +2,7 @@
 <launch>
 	<!-- vim: set ft=xml noet : -->
 	<!-- example launch script for PX4 based FCU's -->
-	<arg name="model_name" default="mantis_uav"/>
+	<arg name="model_id" default="robin"/>
 
 	<arg name="fcu_bind" default="udp://0.0.0.0:14560@0.0.0.0:14551" />
 
@@ -14,10 +14,10 @@
 	<arg name="fcu_protocol" default="v2.0" />
 	<arg name="respawn_mavros" default="false" />
 
-	<group ns="$(arg model_name)">
+	<group ns="$(arg model_id)">
 		<node pkg="robin" type="robin_node" name="robin"
 			args="--telem0 $(arg fcu_bind)
-				  --eeprom robin/$(arg model_name).bin"
+				  --eeprom robin/$(arg model_id).bin"
 			clear_params="true"/>
 
 		<include file="$(find mavros)/launch/node.launch">

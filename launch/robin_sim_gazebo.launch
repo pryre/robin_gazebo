@@ -1,15 +1,14 @@
 <?xml version='1.0'?>
 <launch>
-	<arg name="model" default=""/>
-	<arg name="world" default=""/>
 	<env name="GAZEBO_MODEL_PATH" value="$(find robin_gazebo)/models:$(optenv GAZEBO_MODEL_PATH)" />
 	<env name="GAZEBO_RESOURCE_PATH" value="$(find robin_gazebo)/resources:$(optenv GAZEBO_RESOURCE_PATH)" />
 
 	<!-- GAZEBO SETUP -->
 
-	<arg name="paused" default="false"/>
+	<arg name="paused" default="true"/>
 	<arg name="use_sim_time" default="true"/>
 	<arg name="extra_gazebo_args" default=""/>
+	<arg name="world_name" default="worlds/empty.world"/>
 	<arg name="gui" default="false"/>
 	<arg name="recording" default="false"/>
 	<arg name="headless" default="false"/>
@@ -21,7 +20,7 @@
 	<arg name="pub_clock_frequency" default="100"/>
 
 	<group if="$(arg use_sim_time)">
-	<param name="/use_sim_time" value="true" />
+		<param name="/use_sim_time" value="true" />
 	</group>
 
 	<arg unless="$(arg paused)" name="command_arg1" value=""/>
@@ -39,21 +38,13 @@
 	</group>
 
 	<node name="gazebo" pkg="gazebo_ros" type="$(arg script_type)" respawn="$(arg respawn_gazebo)" output="screen"
-	args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) $(arg extra_gazebo_args) worlds/$(arg world).world" />
+	args="$(arg command_arg1) $(arg command_arg2) $(arg command_arg3) -e $(arg physics) $(arg extra_gazebo_args) $(arg world_name)">
+		<remap from="tf" to="gazebo/tf"/>
+		<remap from="tf_static" to="gazebo/tf_static"/>
+	</node>
 
 	<!-- start gazebo client -->
 	<group if="$(arg gui)">
 		<node name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"/>
 	</group>
-
-	<!-- MODEL SETUP -->
-	<param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)" />
-
-	<node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" args="-urdf -model robin_gazebo -param robot_description -z 1.0"/>
-
-	<!-- HIL SETUP -->
-	<node name="hil_sensor" pkg="robin_gazebo" type="hil_sensor_node" respawn="false"
-	ns="robin_gazebo" output="screen">
-		<remap from="hil/imu_data" to="/mavros/hil/imu_ned"/>
-	</node>
 </launch>

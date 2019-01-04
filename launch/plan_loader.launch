@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<launch>
+	<arg name="move" default="home"/>
+	<arg name="model_id" default="robin"/>
+
+	<group ns="$(arg model_id)">
+		<node pkg="contrail" type="dispatcher" name="waypoint_dispatcher" clear_params="true" output="screen">
+			<param name="action_topic" value="mavel/contrail" />
+
+			<rosparam command="load" file="$(find contrail)/movements/$(arg move).yaml"/>
+		</node>
+	</group>
+</launch>
