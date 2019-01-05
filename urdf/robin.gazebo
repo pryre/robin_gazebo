@@ -18,7 +18,7 @@
 			<topicName>state/imu_data</topicName>
 			<serviceName>imu_service</serviceName>
 			<gaussianNoise>0.0</gaussianNoise>
-			<updateRate>500.0</updateRate>
+			<updateRate>250.0</updateRate>
 		</plugin>
 	</gazebo>
 </robot>
