@@ -17,8 +17,8 @@
 	<group ns="$(arg model_id)">
 		<node pkg="robin" type="robin_node" name="robin"
 			args="--telem0 $(arg fcu_bind)
-				  --eeprom robin/$(arg model_id).bin"
-			clear_params="true" output="screen"/>
+				  --eeprom robin/$(arg model_id).bin"/>
+			<!--clear_params="true" output="screen"/-->
 
 		<include file="$(find mavros)/launch/node.launch">
 			<!--
@@ -26,8 +26,8 @@
 			<arg name="config_yaml" value="$(find mavros)/launch/px4_config.yaml" />
 			-->
 
-			<arg name="pluginlists_yaml" value="$(find mantis_description)/config/robin_sim_pluginlists.yaml" />
-			<arg name="config_yaml" value="$(find mantis_description)/config/robin_config.yaml" />
+			<arg name="pluginlists_yaml" value="$(find robin_gazebo)/config/robin_pluginlists.yaml" />
+			<arg name="config_yaml" value="$(find robin_gazebo)/config/robin_config.yaml" />
 
 			<arg name="fcu_url" value="$(arg fcu_url)" />
 			<arg name="gcs_url" value="$(arg gcs_url)" />
