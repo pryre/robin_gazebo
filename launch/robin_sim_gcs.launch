@@ -1,0 +1,13 @@
+<?xml version='1.0'?>
+<launch>
+	<arg name="rviz" default="true"/>
+	<arg name="rqt" default="true"/>
+
+	<group if="$(arg rviz)">
+		<node name="rviz" pkg="rviz" args="-d $(find robin_gazebo)/config/display.rviz" type="rviz" respawn="false" output="screen"/>
+	</group>
+
+	<group if="$(arg rqt)">
+		<node name="rqt" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find robin_gazebo)/config/dashboard.perspective" respawn="false" output="screen"/>
+	</group>
+</launch>

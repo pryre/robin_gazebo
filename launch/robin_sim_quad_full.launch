@@ -1,8 +1,33 @@
 <?xml version='1.0'?>
 <launch>
-	<include file="$(find robin_gazebo)/launch/robin_sim_quad.launch"/>
+	<arg name="model_id" default="robin"/>
+	<arg name="spawn_x" default="0.0"/>
+	<arg name="spawn_y" default="0.0"/>
+	<arg name="spawn_z" default="0.5"/><!--XXX: Make sure it doesn't spawn in the ground-->
+	<arg name="gazebo" default="true"/>
+	<arg name="rviz" default="true"/>
+	<arg name="rqt" default="true"/>
+	<arg name="fcu_sys" default="1" /><!--XXX: Use this to offset the UDP port for the FCU-->
 
-	<include file="$(find robin_gazebo)/launch/robin_sim_fcu.launch"/>
+	<include file="$(find robin_gazebo)/launch/robin_sim_quad.launch">
+		<arg name="model_id" value="$(arg model_id)" />
+		<arg name="spawn_x" value="$(arg spawn_x)" />
+		<arg name="spawn_y" value="$(arg spawn_y)" />
+		<arg name="spawn_z" value="$(arg spawn_z)" />
+		<arg name="gazebo" value="$(arg gazebo)" />
+	</include>
 
-	<include file="$(find robin_gazebo)/launch/robin_sim_controller.launch"/>
+	<include file="$(find robin_gazebo)/launch/robin_sim_fcu.launch">
+		<arg name="model_id" value="$(arg model_id)" />
+		<arg name="fcu_sys" value="$(arg fcu_sys)" />
+	</include>
+
+	<include file="$(find robin_gazebo)/launch/robin_sim_controller.launch">
+		<arg name="model_id" value="$(arg model_id)" />
+	</include>
+
+	<include file="$(find robin_gazebo)/launch/robin_sim_gcs.launch">
+		<arg name="rviz" value="$(arg rviz)" />
+		<arg name="rqt" value="$(arg rqt)" />
+	</include>
 </launch>

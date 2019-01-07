@@ -4,11 +4,9 @@
 	<arg name="world" default="robin_empty"/>
 	<arg name="model_id" default="robin"/>
 	<arg name="frame_id" default="map"/>
-	<arg name="rviz" default="true"/>
-	<arg name="rqt" default="true"/>
 	<arg name="spawn_x" default="0.0"/>
 	<arg name="spawn_y" default="0.0"/>
-	<arg name="spawn_z" default="0.5"/>
+	<arg name="spawn_z" default="0.5"/><!--XXX: Make sure it doesn't spawn in the ground-->
 	<arg name="gazebo" default="true"/>
 
 	<group ns="$(arg model_id)">
@@ -40,14 +38,6 @@
 
 		<node pkg="tf2_ros" type="static_transform_publisher" name="tf_local_map"
 		args="0.0 0.0 0.0 0.0 0.0 0.0 $(arg model_id)/world map" clear_params="true" output="screen"/>
-	</group>
-
-	<group if="$(arg rviz)">
-		<node name="rviz" pkg="rviz" args="-d $(find robin_gazebo)/config/display.rviz" type="rviz" respawn="false" output="screen"/>
-	</group>
-
-	<group if="$(arg rqt)">
-		<node name="rqt" pkg="rqt_gui" type="rqt_gui" args="--perspective-file $(find robin_gazebo)/config/dashboard.perspective" respawn="false" output="screen"/>
 	</group>
 
 	<!-- Gazebo -->
