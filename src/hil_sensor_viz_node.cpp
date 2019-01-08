@@ -105,11 +105,19 @@ class RobinGazeboHilSensorViz {
 			msg_out.acc = msg_in->linear_acceleration;
 			msg_out.gyro = msg_in->angular_velocity;
 
-			//TODO: The rest (in another callback using "fields_updated" maybe?)
-			msg_out.mag.x = 0.0;
-			msg_out.mag.y = 0.0;
-			msg_out.mag.z = 0.0;
+			//field measurement is north (from ENU) and typically between 0.25 and 0.65 Gauss
+			Eigen::Vector3d mag_w(0.0, 0.4, 0.0);
+			Eigen::Quaterniond q(msg_in->orientation.w,
+								 msg_in->orientation.x,
+								 msg_in->orientation.y,
+								 msg_in->orientation.z);
 
+			Eigen::Vector3d mag_b = q.inverse() * mag_w;
+			msg_out.mag.x = mag_b.x();
+			msg_out.mag.y = mag_b.y();
+			msg_out.mag.z = mag_b.z();
+
+			//TODO: The rest (in another callback using "fields_updated" maybe?)
 			msg_out.abs_pressure = 0.0;
 			msg_out.diff_pressure = 0.0;
 			msg_out.pressure_alt = 0.0;
@@ -117,7 +125,7 @@ class RobinGazeboHilSensorViz {
 			msg_out.temperature = 0.0;
 
 			//Updated IMU and gyro
-			msg_out.fields_updated = 0b00000000000000000000000000111111;
+			msg_out.fields_updated = 0b00000000000000000000000111111111;
 
 			pub_hil_.publish(msg_out);
 		}
