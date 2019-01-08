@@ -14,7 +14,9 @@
 		<param name="base_arm_length" value="0.225"/>
 
 		<node pkg="topic_tools" type="relay" name="relay_pwm" args="mavros/rc/out command/motor_pwm"/>
-		<node pkg="topic_tools" type="relay" name="relay_pose" args="state/pose mavros/mocap/pose"/>
+
+		<!--XXX: Use this relay to send data for external heading-->
+		<!--node pkg="topic_tools" type="relay" name="relay_pose" args="state/pose mavros/mocap/pose"/-->
 
 		<!-- HIL SETUP -->
 		<node name="hil_sensor" pkg="robin_gazebo" type="hil_sensor_viz_node" respawn="false" output="screen">
