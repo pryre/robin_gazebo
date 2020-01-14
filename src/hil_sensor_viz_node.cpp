@@ -16,6 +16,7 @@
 class RobinGazeboHilSensorViz {
 	private:
 		ros::NodeHandle nh_;
+		ros::NodeHandle nhp_;
 
 		ros::Subscriber sub_imu_;
 		ros::Subscriber sub_odom_;
@@ -43,13 +44,14 @@ class RobinGazeboHilSensorViz {
 	public:
 		RobinGazeboHilSensorViz() :
 			nh_(),
+			nhp_("~"),
 			param_prop_layout_(""),
 			motor_num_(0),
 			base_arm_length_(0.250),
 			prop_rate_(0.57),
 			viz_rate_(25.0) {
 
-			nh_.param("viz_rate", viz_rate_, viz_rate_);
+			nhp_.param("viz_rate", viz_rate_, viz_rate_);
 			nh_.param("prop_layout", param_prop_layout_, param_prop_layout_);
 			nh_.param("base_arm_length", base_arm_length_, base_arm_length_);
 
@@ -60,12 +62,10 @@ class RobinGazeboHilSensorViz {
 
 			while( ros::ok() && msg_odom_.header.stamp == ros::Time(0) ) {
 				ros::spinOnce();
-				ros::Rate(viz_rate_).sleep();
+				ros::Rate(10.0).sleep();
 			}
 
 			if( ros::ok() ) {
-				ROS_INFO("[HIL] preparing visualization transforms...");
-
 				//TF
 				//Send static transforms for rviz model
 				/*
@@ -76,11 +76,17 @@ class RobinGazeboHilSensorViz {
 				tf.transform.rotation.w = 1.0;
 				tfsbr_.sendTransform(tf);
 				*/
-				prepare_prop_viz();
 
 				sub_imu_ = nh_.subscribe<sensor_msgs::Imu> ( "state/imu_data", 1, &RobinGazeboHilSensorViz::imu_cb, this );
 				sub_rc_ = nh_.subscribe<mavros_msgs::RCOut> ( "command/motor_pwm", 1, &RobinGazeboHilSensorViz::rc_cb, this );
-				timer_viz_ = nh_.createTimer(ros::Duration(1.0/viz_rate_), &RobinGazeboHilSensorViz::viz_cb, this );
+
+				if(viz_rate_ > 0) {
+					ROS_INFO("[HIL] preparing visualization transforms...");
+					prepare_prop_viz();
+
+					ROS_INFO("[HIL] Enabling visualisation...");
+					timer_viz_ = nh_.createTimer(ros::Duration(1.0/viz_rate_), &RobinGazeboHilSensorViz::viz_cb, this );
+				}
 
 				ROS_INFO("[HIL] Ready and running!");
 			}
