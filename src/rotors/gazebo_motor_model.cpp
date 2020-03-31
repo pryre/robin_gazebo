@@ -21,10 +21,13 @@
 
 #include "rotors/gazebo_motor_model.hpp"
 
+#include <gazebo/common/common.hh>
+
 namespace gazebo {
 
 GazeboMotorModel::~GazeboMotorModel() {
-  event::Events::DisconnectWorldUpdateBegin(updateConnection_);
+  //event::Events::DisconnectWorldUpdateBegin(updateConnection_);
+  updateConnection_.reset();
   use_pid_ = false;
 }
 
@@ -185,8 +188,8 @@ void GazeboMotorModel::UpdateForcesAndMoments() {
 	// 2010 IEEE Conference on Robotics and Automation paper
 	// The True Role of Accelerometer Feedback in Quadrotor Control
 	// - \omega * \lambda_1 * V_A^{\perp}
-	ignition::math::Vector3d joint_axis = joint_->GetGlobalAxis(0).Ign();
-	ignition::math::Vector3d body_velocity_W = link_->GetWorldLinearVel().Ign();
+	ignition::math::Vector3d joint_axis = joint_->GlobalAxis(0);
+	ignition::math::Vector3d body_velocity_W = link_->WorldLinearVel();
 	ignition::math::Vector3d wind_speed_W = ignition::math::Vector3d::Zero;
 	ignition::math::Vector3d relative_wind_velocity_W = body_velocity_W - wind_speed_W;
 	ignition::math::Vector3d body_velocity_perpendicular =
@@ -203,7 +206,7 @@ void GazeboMotorModel::UpdateForcesAndMoments() {
 	physics::Link_V parent_links = link_->GetParentJointsLinks();
 	// The tansformation from the parent_link to the link_.
 	ignition::math::Pose3d pose_difference =
-	  (link_->GetWorldCoGPose() - parent_links.at(0)->GetWorldCoGPose()).Ign();
+	  (link_->WorldCoGPose() - parent_links.at(0)->WorldCoGPose());
 	ignition::math::Vector3d drag_torque(
 	  0, 0, -turning_direction_ * thrust * moment_constant_);
 	// Transforming the drag torque into the parent frame to handle

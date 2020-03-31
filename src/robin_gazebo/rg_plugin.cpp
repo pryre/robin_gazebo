@@ -104,20 +104,20 @@ class RobinGazeboPlugin : public ModelPlugin
 			//Handle Odometry for ROS
 			msg_odom_.header.stamp = e.current_real;
 
-			msg_odom_.pose.pose.position.x = model_->GetWorldPose().pos.x;
-			msg_odom_.pose.pose.position.y = model_->GetWorldPose().pos.y;
-			msg_odom_.pose.pose.position.z = model_->GetWorldPose().pos.z;
-			msg_odom_.pose.pose.orientation.w = model_->GetWorldPose().rot.w;
-			msg_odom_.pose.pose.orientation.x = model_->GetWorldPose().rot.x;
-			msg_odom_.pose.pose.orientation.y = model_->GetWorldPose().rot.y;
-			msg_odom_.pose.pose.orientation.z = model_->GetWorldPose().rot.z;
+			msg_odom_.pose.pose.position.x = model_->WorldPose().Pos().X();
+			msg_odom_.pose.pose.position.y = model_->WorldPose().Pos().Y();
+			msg_odom_.pose.pose.position.z = model_->WorldPose().Pos().Z();
+			msg_odom_.pose.pose.orientation.w = model_->WorldPose().Rot().W();
+			msg_odom_.pose.pose.orientation.x = model_->WorldPose().Rot().X();
+			msg_odom_.pose.pose.orientation.y = model_->WorldPose().Rot().Y();
+			msg_odom_.pose.pose.orientation.z = model_->WorldPose().Rot().Z();
 
-			msg_odom_.twist.twist.linear.x = model_->GetRelativeLinearVel().x;
-			msg_odom_.twist.twist.linear.y = model_->GetRelativeLinearVel().y;
-			msg_odom_.twist.twist.linear.z = model_->GetRelativeLinearVel().z;
-			msg_odom_.twist.twist.angular.x = model_->GetRelativeAngularVel().x;
-			msg_odom_.twist.twist.angular.y = model_->GetRelativeAngularVel().y;
-			msg_odom_.twist.twist.angular.z = model_->GetRelativeAngularVel().z;
+			msg_odom_.twist.twist.linear.x = model_->RelativeLinearVel().X();
+			msg_odom_.twist.twist.linear.y = model_->RelativeLinearVel().Y();
+			msg_odom_.twist.twist.linear.z = model_->RelativeLinearVel().Z();
+			msg_odom_.twist.twist.angular.x = model_->RelativeAngularVel().X();
+			msg_odom_.twist.twist.angular.y = model_->RelativeAngularVel().Y();
+			msg_odom_.twist.twist.angular.z = model_->RelativeAngularVel().Z();
 
 			pub_odom_.publish(msg_odom_);
 
