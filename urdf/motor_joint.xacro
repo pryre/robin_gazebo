@@ -20,10 +20,10 @@
 				<origin xyz="0 0 -0.0036" rpy="0 0 0"/>
 				<geometry>
 					<xacro:if value="${direction == 'cw'}">
-						<mesh filename="package://mantis_description/meshes/prop_8045_CW.stl" scale="0.001 0.001 0.001"/>
+						<mesh filename="package://robin_gazebo/resources/meshes/prop_8045_CW.stl" scale="0.001 0.001 0.001"/>
 					</xacro:if>
 					<xacro:if value="${direction == 'ccw'}">
-						<mesh filename="package://mantis_description/meshes/prop_8045_CCW.stl" scale="0.001 0.001 0.001"/>
+						<mesh filename="package://robin_gazebo/resources/meshes/prop_8045_CCW.stl" scale="0.001 0.001 0.001"/>
 					</xacro:if>
 				</geometry>
 				<material name="black"/>
@@ -38,7 +38,7 @@
 		</joint>
 
 		<gazebo>
-			<plugin name='mantis_gazebo_motor_model_${motor_number}' filename='libmantis_gazebo_motor_model.so'>
+			<plugin name='robin_gazebo_motor_model_${motor_number}' filename='librobin_gazebo_motor_model.so'>
 				<robotNamespace></robotNamespace>
 				<jointName>joint_rotor_${motor_number}</jointName>
 				<linkName>link_rotor_${motor_number}</linkName>
