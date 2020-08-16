@@ -3,6 +3,7 @@
 # Control
 control_rate: 50.0
 control_frame: "map"
+use_tracking_control: true
 
 # Path-following options
 contrail:
@@ -77,3 +78,19 @@ control:
       d: 0.05
       min: -2.5
       max: 5.0
+  track:
+    x:
+      w0: 1.0
+      rki: 0.0
+      min: -2.5
+      max: 2.5
+    y:
+      w0: 1.0
+      rki: 0.0
+      min: -2.5
+      max: 2.5
+    z:
+      w0: 1.0
+      rki: 0.2
+      min: -2.5
+      max: 2.5
